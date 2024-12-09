@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import CustomImage from "@/components/custom-image";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
+import ReactStars from "react-stars";
 const ProductDetailedPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductType>();
@@ -82,6 +83,7 @@ const ProductDetailedPage = () => {
                           )}
                         </div>
                       )}
+                      {/* <ReactStars value={product?.rating.rate} edit={false} /> */}
                       <p className="text-blue-600 hover:underline cursor-pointer text-xs">
                         See all {product?.rating.count} reviews
                       </p>
