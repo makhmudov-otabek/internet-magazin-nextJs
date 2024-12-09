@@ -6,7 +6,7 @@ import Link from "next/link";
 const Product: FC<{ product: ProductType }> = ({ product }) => {
   return (
     <Link
-      href={`${product.id}`}
+      href={`/product/${product.id}`}
       className="h-96 flex flex-col border p-6 rounded-lg group hover:scale-105 transition-transform ease-out duration-200"
     >
       {/* <img
