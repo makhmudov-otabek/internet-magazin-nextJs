@@ -8,6 +8,7 @@ import CustomImage from "@/components/custom-image";
 import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 import ReactStars from "react-stars";
+import { toast } from "react-toastify";
 const ProductDetailedPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductType>();
@@ -25,6 +26,33 @@ const ProductDetailedPage = () => {
     }
     getData();
   }, [params.id]);
+
+  const handleClick = () => {
+    const products =
+      JSON.parse(localStorage.getItem("products") as string) || [];
+
+    const isExsistingProduct = products.find(
+      (c: ProductType) => c.id === product?.id
+    );
+
+    if (isExsistingProduct && product) {
+      const updatedData = products.map((c: ProductType) => {
+        if (c.id == product.id) {
+          return {
+            ...c,
+            quantity: c.quantity + 1,
+          };
+        }
+        return c;
+      });
+      localStorage.setItem("products", JSON.stringify(updatedData));
+    } else {
+      const data = [...products, { ...product, quantity: 1 }];
+      localStorage.setItem("products", JSON.stringify(data));
+    }
+
+    toast.success("Added to your bag!");
+  };
 
   return (
     <Dialog
@@ -89,7 +117,10 @@ const ProductDetailedPage = () => {
                       </p>
                     </div>
                     <div className="space-y-3 text-sm">
-                      <button className="button w-full bg-blue-600 text-white border-transparent hover:border-blue-600 hover:bg-transparent hover:text-black">
+                      <button
+                        className="button w-full bg-blue-600 text-white border-transparent hover:border-blue-600 hover:bg-transparent hover:text-black"
+                        onClick={handleClick}
+                      >
                         Add to bag
                       </button>
                       <button
