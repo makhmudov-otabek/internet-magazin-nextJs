@@ -7,16 +7,25 @@ const ShoppingCart = () => {
     JSON.parse(localStorage.getItem("products") as string) || [];
 
   const [data, setData] = useState(products);
+  const [isDisabeld, setIsDisabeld] = useState(
+    products.length > 0 ? false : true
+  );
 
   const decreaseQuantity = (product: ProductType) => {
-    const updatedData = products.map((c: ProductType) => {
-      if (c.id === product.id)
-        return {
-          ...product,
-          quantity: c.quantity - 1,
-        };
-      else return c;
-    });
+    let updatedData: ProductType[] = [];
+
+    if (product.quantity == 0 || product.quantity == 1) {
+      updatedData = products.filter((c) => c.id != product.id);
+    } else {
+      updatedData = products.map((c: ProductType) => {
+        if (c.id === product.id)
+          return {
+            ...product,
+            quantity: c.quantity - 1,
+          };
+        else return c;
+      });
+    }
 
     localStorage.setItem("products", JSON.stringify(updatedData));
     setData(updatedData);
@@ -397,7 +406,10 @@ const ShoppingCart = () => {
                   </div>
                 </div>
                 <div className="flex items-center border-b border-gray-200">
-                  <button className="rounded-lg w-full bg-black py-2.5 px-4 text-white text-sm font-semibold text-center mb-8 transition-all duration-500 hover:bg-black/80">
+                  <button
+                    className="rounded-lg w-full bg-black py-2.5 px-4 text-white text-sm font-semibold text-center mb-8 transition-all duration-500 hover:bg-black/80 disabled:bg-gray-500 disabled:cursor-not-allowed"
+                    disabled={isDisabeld}
+                  >
                     Apply
                   </button>
                 </div>
@@ -406,17 +418,22 @@ const ShoppingCart = () => {
                     {products.length} Items
                   </p>
                   <p className="font-semibold text-xl leading-8 text-indigo-600">
-                    {(
-                      products.reduce((total, product) => {
-                        return product.price * product.quantity + total;
-                      }, 0) + 5
-                    ).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "usd",
-                    })}
+                    {products.length > 0
+                      ? (
+                          products.reduce((total, product) => {
+                            return product.price * product.quantity + total;
+                          }, 0) + 5
+                        ).toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "usd",
+                        })
+                      : 0}
                   </p>
                 </div>
-                <button className="w-full text-center bg-indigo-600 rounded-xl py-3 px-6 font-semibold text-lg text-white transition-all duration-500 hover:bg-indigo-700">
+                <button
+                  className="w-full text-center bg-indigo-600 rounded-xl py-3 px-6 font-semibold text-lg text-white transition-all duration-500 hover:bg-indigo-700 disabled:bg-gray-500 disabled:cursor-not-allowed"
+                  disabled={isDisabeld}
+                >
                   Checkout
                 </button>
               </form>
