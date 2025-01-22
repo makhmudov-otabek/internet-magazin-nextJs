@@ -2,10 +2,13 @@ import { ProductType } from "@/interfaces";
 import Product from "@/components/product";
 
 export default async function Home() {
-  const res = await fetch("https://fakestoreapi.com/products");
-  const products = await res.json();
+  // const res = await fetch("https://fakestoreapi.com/products");
+  // const products = await res.json();
 
-  return (
+  try {
+    const res = await fetch("https://fakestoreapi.com/products");
+    const products = await res.json();
+
     <main className="min-h-screen max-w-7xl mx-auto  px-8 xl:px-0">
       <section className="flex flex-col space-y-12">
         <h1 className="text-5xl font-bold text-center">SS SHOP DEALS</h1>
@@ -16,6 +19,9 @@ export default async function Home() {
           ))}
         </div>
       </section>
-    </main>
-  );
+    </main>;
+  } catch (error) {
+    console.error(error);
+    return <h1>Something went wrong!!!</h1>;
+  }
 }
